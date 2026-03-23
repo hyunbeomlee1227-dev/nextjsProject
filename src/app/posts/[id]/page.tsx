@@ -11,9 +11,17 @@ interface Post {
   content: string
 }
 
+interface Comment {
+  id: number
+  create_at: string
+  content: string
+  post_id: number
+}
+
 export default function PostDetail() {
   const { id } = useParams()
   const [post, setPost] = useState<Post | null>(null)
+  const [comments, setComment] = useState<Comment[]>([])
 
   const fetchPost = async () => {
     const { data: post, error } = await supabase
@@ -21,11 +29,22 @@ export default function PostDetail() {
       .select('*')
       .eq('id', id as string)
       .single()
+
     setPost(post)
+  }
+
+  const fetchComments = async () => {
+    const { data: comments, error } = await supabase
+      .from('comments')
+      .select('*')
+      .eq('post_id', id as string)
+
+    setComment(comments ?? [])
   }
 
   useEffect(() => {
     fetchPost()
+    fetchComments()
   }, [])
 
   if (!post) return <>Loading...</>
@@ -35,6 +54,12 @@ export default function PostDetail() {
       <div>{post.id}번 게시글 상세</div>
       <div>{post.title}</div>
       <div>{post.content}</div>
+      <div>댓글</div>
+      <ul>
+        {comments.map((comment) => (
+          <li key={comment.id}> - {comment.content}</li>
+        ))}
+      </ul>
     </>
   )
 }
