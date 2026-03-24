@@ -15,7 +15,10 @@ export default function PostList() {
   const [posts, setPosts] = useState<Post[]>([])
 
   const fetchPosts = async () => {
-    let { data: posts, error } = await supabase.from('posts').select('*')
+    let { data: posts, error } = await supabase
+      .from('posts')
+      .select('*')
+      .order('created_at', { ascending: true })
     setPosts((posts as Post[]) ?? [])
   }
 
@@ -32,6 +35,9 @@ export default function PostList() {
           </Link>
         </li>
       ))}
+      <Link href="/posts/new" className="p-2 rounded hover:bg-gray-200">
+        글쓰기
+      </Link>
     </ul>
   )
 }
