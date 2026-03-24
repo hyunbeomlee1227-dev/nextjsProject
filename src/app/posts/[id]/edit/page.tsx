@@ -32,8 +32,11 @@ function EditPost() {
       .eq('id', id as string)
       .select()
 
-    if (error) console.log(error)
-    else {
+    if (error) {
+      console.log(error)
+    } else if (!data || data.length === 0) {
+      alert('권한이 없습니다.')
+    } else {
       alert('수정성공')
       router.push(`/posts/${id}`)
     }
