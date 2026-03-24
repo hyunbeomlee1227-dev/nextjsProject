@@ -1,6 +1,7 @@
 'use client'
 
 import { supabase } from '@/app/supabase/supabase'
+import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -76,6 +77,12 @@ export default function PostDetail() {
       >
         삭제
       </button>
+      <Link
+        href={`/posts/${post.id}/edit`}
+        className="p-3 rounded border-1 hover:bg-gray-200"
+      >
+        수정
+      </Link>
     </>
   )
 }
